@@ -1,6 +1,7 @@
 package com.github.cypekdev;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,10 +41,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String prompt = promptET.getText().toString();
+                Log.d("Prompt", prompt);
 
                 chat.sendMessage(api, prompt, new StreamCallback() {
                     @Override
                     public void onMessageChunk(String message) {
+                        Log.d("Prompt", message);
 
                     }
 

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +16,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    Api api;
-    Chat chat;
+    StreamApiClient client;
     Button sendBtn;
     EditText promptET;
+    TextView textView;
+    String result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,41 +33,42 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        chat = new Chat();
-        api = new Api("gemma3:12b", "192.168.1.69:11434/api/chat");
+        client = new StreamApiClient();
 
         sendBtn = findViewById(R.id.sendPromptBtn);
         promptET = findViewById(R.id.promptEditText);
+        textView = findViewById(R.id.textView);
+
+        result = "";
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String prompt = promptET.getText().toString();
-                Log.d("Prompt", prompt);
+                sendMessage(prompt);
+                promptET.setText("");
+            }
+        });
+    }
 
-                chat.sendMessage(api, prompt, new StreamCallback() {
-                    @Override
-                    public void onMessageChunk(String message) {
-                        Log.d("Prompt", message);
+    private void sendMessage(String prompt) {
 
-                    }
+        client.chat(prompt, new StreamApiClient.ApiCallback() {
+            @Override
+            public void onChunk(String data) {
+                result += data;
+                textView.setText(result);
+            }
 
-                    @Override
-                    public void onComplete() {
+            @Override
+            public void onComplete() {
 
-                    }
+            }
 
-                    @Override
-                    public void onError(Throwable t) {
-
-                    }
-                });
+            @Override
+            public void onFailure(Exception e) {
 
             }
         });
-
-
-
-
     }
 }

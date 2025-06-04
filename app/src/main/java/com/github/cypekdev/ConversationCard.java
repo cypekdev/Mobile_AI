@@ -5,23 +5,32 @@ import androidx.lifecycle.MutableLiveData;
 
 public class ConversationCard {
     private final String userPrompt;
-    private final MutableLiveData<String> assistantAnswer;
-
+    private String assistantAnswer;
+    private boolean completed;
 
     public ConversationCard(String userPrompt) {
         this.userPrompt = userPrompt;
-        this.assistantAnswer = new MutableLiveData<>("");
+        this.assistantAnswer = "";
+        this.completed = false;
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 
     public void appendAssistantAnswer(String chunk) {
-        assistantAnswer.postValue(assistantAnswer.getValue() + chunk);
+        assistantAnswer = assistantAnswer + chunk;
+    }
+
+    public void setCompleted() {
+        completed = true;
     }
 
     public String getUserPrompt() {
         return userPrompt;
     }
 
-    public LiveData<String> getAssistantAnswer() {
+    public String getAssistantAnswer() {
         return assistantAnswer;
     }
 }

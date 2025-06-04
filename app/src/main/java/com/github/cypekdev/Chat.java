@@ -13,15 +13,26 @@ public class Chat {
         this.conversation = new ArrayList<>();
     }
 
+    private boolean isAnswerCompleted() {
+        if (conversation.isEmpty()) {
+            return true;
+        }
+
+        int lastIndex = conversation.size() - 1;
+        ConversationCard lastCC = conversation.get(lastIndex);
+        return lastCC.isCompleted();
+    }
+
     public List<ConversationCard> getConversation() {
         return new ArrayList<>(conversation);
     }
 
     public void send(StreamApiClient client, String prompt) {
-        ConversationCard newConversationCard = new ConversationCard(prompt);
 
-        client.chat(conversation, newConversationCard);
-
-        conversation.add(newConversationCard);
+        if (isAnswerCompleted()) {
+            ConversationCard newConversationCard = new ConversationCard(prompt);
+            client.chat(conversation, newConversationCard);
+            conversation.add(newConversationCard);
+        }
     }
 }

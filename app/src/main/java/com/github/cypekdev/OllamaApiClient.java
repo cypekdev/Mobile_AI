@@ -42,7 +42,7 @@ public class OllamaApiClient implements StreamApiClient {
 
             messages.put(new JSONObject()
                     .put("role", "assistant")
-                    .put("content", conversationCard.getAssistantAnswer().getValue()));
+                    .put("content", conversationCard.getAssistantAnswer()));
         }
 
         messages.put(new JSONObject()
@@ -87,9 +87,11 @@ public class OllamaApiClient implements StreamApiClient {
                             String chunk = (new JSONObject(line))
                                     .getJSONObject("message")
                                     .getString("content");
+
+                            conversationCard.appendAssistantAnswer(chunk);
                         }
 
-                        Log.d("Stream", "Completed");
+                        conversationCard.setCompleted();
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }

@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
             public void send(StreamApiClient client, String prompt) {
                 ConversationCard newConversationCard = new ConversationCard(prompt);
 
-//                newConversationCard.appendAssistantAnswer("Chuj ci w dupe");
 
                 new Thread(() -> {
                     try {
@@ -80,9 +79,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        chatViewModel.getStreamingResponse().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String prompt = promptET.getText().toString();
                 chatViewModel.sendPrompt(client, prompt);
                 promptET.setText("");

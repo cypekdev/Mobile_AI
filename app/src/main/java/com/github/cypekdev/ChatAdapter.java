@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import java.util.List;
@@ -32,7 +33,12 @@ public class ChatAdapter extends ArrayAdapter<ConversationCard> {
 
         assert item != null;
         userPromptTV.setText(item.getUserPrompt());
-        assistantAnswerTV.setText(item.getAssistantAnswer().getValue());
+
+//        LiveData<String> assistantAnswer = item.getAssistantAnswer();
+//
+//        assistantAnswer.observe(lifecycle);
+
+        assistantAnswerTV.setText(item.getAssistantAnswer());
 
         return convertView;
     }

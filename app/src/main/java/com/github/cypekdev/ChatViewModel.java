@@ -17,12 +17,12 @@ public class ChatViewModel extends ViewModel {
         this.chat = chat;
     }
 
-    public ChatViewModel() {
-        this(new Chat());
-    }
-
     public LiveData<List<ConversationCard>> getConversation() {
         return conversationLiveData;
+    }
+
+    public MutableLiveData<String> getStreamingResponse() {
+        return streamingResponse;
     }
 
     public void sendPrompt(StreamApiClient client, String prompt) {
